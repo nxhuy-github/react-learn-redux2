@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import {userAction, productsAction} from './actions/index'
+import {userAction, productsAction, apiRequest} from './actions/index'
 import {connect} from 'react-redux'
 import {bindActionCreators} from 'redux'
 
@@ -14,6 +14,14 @@ class App extends React.Component {
     console.log("Clicked")
     this.props.action1()
   }
+
+  componentDidMount() {
+    // fetch API
+    setTimeout(() => {
+      this.props.action3()
+    }, 1500)
+  }
+
   render() {
     console.log(this.props)
     return (
@@ -40,7 +48,8 @@ const mapActionToProp = (dispatch, props) => {
   console.log("Log from mapActionToProp: ", props)
   return bindActionCreators({
     action1: userAction,
-    action2: productsAction
+    action2: productsAction,
+    action3: apiRequest
   }, dispatch)
 }
 

@@ -1,26 +1,47 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {userAction, productsAction} from './actions/index'
+import {connect} from 'react-redux'
+import {bindActionCreators} from 'redux'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(){
+    super()
+    this.myfunction = this.myfunction.bind(this)
+  }
+
+  myfunction() {
+    console.log("Clicked")
+    this.props.action1()
+  }
+  render() {
+    console.log(this.props)
+    return (
+      <div className="App">
+        <h1>Hello World</h1><br/>
+        {this.props.defaultProp}<br/>
+        {this.props.user}<br/>
+        <input onChange={(e) => {this.props.action1(e.target.value)}} />User Action: {this.props.user}
+      </div>
+    );
+  }
 }
 
-export default App;
+const mapStateToProp = (state, props) => {
+  console.log("Log from mapStateToProp: ", state, props)
+  return {
+    user: state.user,
+    products: state.products,
+    mergeProp: `${state.user}-${props.defaultProp}`
+  }
+}
+
+const mapActionToProp = (dispatch, props) => {
+  console.log("Log from mapActionToProp: ", props)
+  return bindActionCreators({
+    action1: userAction,
+    action2: productsAction
+  }, dispatch)
+}
+
+export default connect(mapStateToProp, mapActionToProp)(App);
